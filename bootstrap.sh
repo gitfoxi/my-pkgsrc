@@ -33,8 +33,12 @@
 ca() {
     (cd "$@" && pwd -P) ;
 }
+UNAME=`uname`
+ARCH=`uname -m`
 
 PKG_ROOT=$(ca ".")
+PKG="$UNAME"_"$ARCH"
+echo PKG: $PKG
 WORK_DIR=$PKG_ROOT/pkgsrc/bootstrap/work 
 TARBALL=pkgsrc-2012Q2.tar.gz
 URL=http://ftp.netbsd.org/pub/pkgsrc/pkgsrc-2012Q2/pkgsrc-2012Q2.tar.gz
@@ -48,8 +52,6 @@ echo WORK_DIR: $WORK_DIR
 # Generate mk.conf fragment
 frag() {
 	# TODO: for more targets
-	UNAME=`uname`
-	ARCH=`uname -m`
 	# TODO: More architectures
 	echo UNAME: $UNAME ARCH: $ARCH
 
@@ -136,16 +138,16 @@ fi
 
 bootstrap_pkgsrc() {
 	#TODO: foreach ...
-	if [ -e $PKG_ROOT/pkg ]; then
-		echo "$PKG_ROOT/pkg already exists. Bootstrap will fail so lets not even try. Consider deleting it if this is what you want. Otherwise proceed as if it works good."
+	if [ -e $PKG_ROOT/$PKG ]; then
+		echo "$PKG_ROOT/$PKG already exists. Bootstrap will fail so lets not even try. Consider deleting it if this is what you want. Otherwise proceed as if it works good."
 	elif [ -e $WORK_DIR ]; then
 		echo "$WORK_DIR already exists. Bootstrap will fail so lets not even try. Consider deleting it if this is what you want. Otherwise proceed as if it works good."
 	else
 		decorate "Boostraping, leaving control now to pkgsrc ..."
 		CMD="pkgsrc/bootstrap/bootstrap \
-		--prefix=$PKG_ROOT/pkg \
-		--varbase=$PKG_ROOT/pkg/var \
-		--pkgdbdir=$PKG_ROOT/pkg/var/db/pkg \
+		--prefix=$PKG_ROOT/$PKG \
+		--varbase=$PKG_ROOT/$PKG/var \
+		--pkgdbdir=$PKG_ROOT/$PKG/var/db/pkg \
 		--workdir=$WORK_DIR \
 		--mk-fragment=mk.generated.fragment \
 		--unprivileged 
@@ -156,8 +158,9 @@ bootstrap_pkgsrc() {
 fi
 }
 make_my_env() {
-	CMD="sed s@PKG_DIR@$PKG_ROOT/pkg@ my-env.template"
+	CMD="sed s@PKG_DIR@$PKG_ROOT/$PKG@ my-env.template"
 	$CMD > my-env
+	chmod +x my-env
 }
 
 # Main program 
@@ -166,7 +169,7 @@ while [ $# -gt 0 ]; do
 	case $1 in 
 	-h)	usage ;;
 	--help) usage ;;
-	--clean) rm -Rf $TARBALL $TARBALL.MD5 pkgsrc pkg ;;
+	--clean) rm -Rf $TARBALL $TARBALL.MD5 pkgsrc pkg/$PKG ;;
 	-*) usage ;;
 	--*) usage ;;
 	esac
