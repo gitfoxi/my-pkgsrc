@@ -4,4 +4,6 @@ my-env
 pkg
 pkgsrc
 *.swo
+*.tar.gz
+*.MD5
 
