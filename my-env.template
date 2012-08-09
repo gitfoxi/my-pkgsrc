@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Source this file to put yourself in the my environment like:
+#
+#   . my-env
+# 
+# Or run a single program in the my environment like:
+#
+#   my-env program
+#
+# You might want to make an alias in your .bashrc for quick access:
+#
+#   alias a=/path/to/my-env
+
+
+
+my=PKG_DIR
+PATH=$my/bin:$my/sbin:$PATH
+MANPATH=$my/manpath:$MANPATH
+
+# Remind me that I'm in PKGSRC
+red='\e[1;31m'
+normal='\e[0m'
+PS1=$red:PKGSRC:$normal$PS1
+XDG_DATA_DIRS=$my/share
+
+# Not sure whether this one is necessary
+# LD_LIBRARY_PATH=$my/lib:$LD_LIBRARY_PATH
+# export LD_LIBRARY_PATH
+
+export PATH
+export MANPATH
+export PS1
+
+$*
+

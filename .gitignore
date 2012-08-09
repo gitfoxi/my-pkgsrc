@@ -1,0 +1,7 @@
+*.swp
+mk.generated.fragment
+my-env
+pkg
+pkgsrc
+*.swo
+
