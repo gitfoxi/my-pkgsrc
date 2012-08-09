@@ -1,0 +1,10 @@
+
+# Turn on some good options
+PKG_DEVELOPER=yes 
+MASTER_SORT_RANDOM=NO 
+# Minimal build is stupid and impossible because git requires crazy things even
+# to do the minimum. But here goes
+# PKG_DEFAULT_OPTIONS= -readline -scmgit-gui -python
+# No point using -python since it gets built as part of toolchain anyway.
+PKG_OPTIONS.scmgit-base= -scmgit-gui
+
