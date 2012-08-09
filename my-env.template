@@ -12,6 +12,7 @@
 #
 #   alias a=/path/to/my-env
 
+# TODO: There's a bug in the PS1. It messes with completion and wraping.
 
 
 my=PKG_DIR
@@ -19,9 +20,9 @@ PATH=$my/bin:$my/sbin:$PATH
 MANPATH=$my/manpath:$MANPATH
 
 # Remind me that I'm in PKGSRC
-red='\e[1;31m'
-normal='\e[0m'
-PS1=$red:PKGSRC:$normal$PS1
+red='\[\e[1;31m\]'
+normal='\[\e[0m\]'
+PS1="$red:PKGSRC:$normal$PS1 "
 XDG_DATA_DIRS=$my/share
 
 # Not sure whether this one is necessary
